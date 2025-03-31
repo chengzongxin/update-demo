@@ -47,6 +47,10 @@
         "projectId": "ebd749dc-7b8c-418e-84b6-3c24f3d77d50"
       }
     },
-    "owner": "worker-rn"
+    "owner": "worker-rn",
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/ebd749dc-7b8c-418e-84b6-3c24f3d77d50"
+    }
   }
 }
