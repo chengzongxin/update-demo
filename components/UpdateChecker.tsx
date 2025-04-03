@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { StyleSheet, Alert, Platform, TouchableOpacity } from 'react-native';
+import { StyleSheet, Alert, Platform, TouchableOpacity, View, Text } from 'react-native';
 import * as Updates from 'expo-updates';
-import { ThemedText } from './ThemedText';
-import { ThemedView } from './ThemedView';
 
 export function UpdateChecker() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // 检查更新
   const checkForUpdates = async () => {
@@ -38,6 +37,7 @@ export function UpdateChecker() {
               text: '更新',
               onPress: async () => {
                 try {
+                  setIsUpdating(true);
                   // 下载更新
                   await Updates.fetchUpdateAsync();
                   // 应用更新
@@ -45,6 +45,8 @@ export function UpdateChecker() {
                 } catch (error) {
                   console.error('更新失败:', error);
                   Alert.alert('更新失败', '请稍后重试');
+                } finally {
+                  setIsUpdating(false);
                 }
               },
             },
@@ -62,20 +64,20 @@ export function UpdateChecker() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       <TouchableOpacity 
         style={[styles.button, isChecking && styles.buttonDisabled]}
         onPress={checkForUpdates}
-        disabled={isChecking}
+        disabled={isChecking || isUpdating}
       >
-        <ThemedText style={styles.buttonText}>
-          {isChecking ? '检查中...' : '检查更新'}
-        </ThemedText>
+        <Text style={styles.buttonText}>
+          {isChecking ? '检查中...' : isUpdating ? '更新中...' : '检查更新'}
+        </Text>
       </TouchableOpacity>
       {updateAvailable && (
-        <ThemedText style={styles.updateText}>有新版本可用</ThemedText>
+        <Text style={styles.updateText}>有新版本可用</Text>
       )}
-    </ThemedView>
+    </View>
   );
 }
 
